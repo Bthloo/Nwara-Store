@@ -22,8 +22,13 @@ class NewReceiptDetailsScreen extends StatelessWidget {
    final itemBox = Hive.box<ItemModel>("items");
 
    final TextEditingController quantityController = TextEditingController();
+   final TextEditingController externalNameItemController = TextEditingController();
+   final TextEditingController externalPriceItemController = TextEditingController();
+
    final _nameFormKey = GlobalKey<FormState>();
    final _addItemFormKey = GlobalKey<FormState>();
+   final _addExternalItemFormKey = GlobalKey<FormState>();
+
    BuildContext? getReceiptsContext;
    //final AddItemToReceiptCubit addItemToReceiptCubit = AddItemToReceiptCubit();
 
@@ -127,7 +132,6 @@ class NewReceiptDetailsScreen extends StatelessWidget {
                           index: argument,
                           context: context,
                           state: state
-
                         );
                         // _showAddItem(
                         //     index: argument!.index,
@@ -136,6 +140,16 @@ class NewReceiptDetailsScreen extends StatelessWidget {
                         // );
                       },
                       icon: const Icon(Icons.add_circle_sharp,color: ColorHelper.mainColor,size: 30,)
+                  ),
+                  IconButton(
+                      onPressed: (){
+                        _showAddExternalItem(
+                            index: argument,
+                            context: context,
+                            state: state
+                        );
+                      },
+                      icon: const Icon(Icons.mode_edit_sharp,color: ColorHelper.mainColor,size: 30,)
                   ),
                   const Spacer(),
                   Container(
@@ -271,15 +285,6 @@ class NewReceiptDetailsScreen extends StatelessWidget {
                                                 sellPrice: afterDeleteSellPrice,
                                                 netIncome: afterDeleteNetIncome
                                             ));
-                                        itemBox.put(
-                                            state.receiptModel.itemModel[index].key,
-                                            ItemModel(
-                                              name: state.receiptModel.itemModel[index].itemModel.name,
-                                              originalPrice: state.receiptModel.itemModel[index].itemModel.originalPrice,
-                                              sellPrice: state.receiptModel.itemModel[index].itemModel.sellPrice,
-                                              quantity: (state.receiptModel.itemModel[index].itemModel.quantity)+ (itemBox.get(state.receiptModel.itemModel[index].key)!.quantity)
-                                              )
-                                            );
                                         state.receiptModel.itemModel.removeAt(index);
 
                                        //await itemBox.deleteAt(index);
@@ -359,7 +364,8 @@ class NewReceiptDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Column(children: [
+              Column(
+                children: [
                 Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: ColorHelper.mainColor,width: 2)
@@ -750,6 +756,144 @@ class NewReceiptDetailsScreen extends StatelessWidget {
            ),
          )).then((value) => quantityController.clear());
    }
+
+
+   void _showAddExternalItem({
+     required BuildContext context,
+     required int index,
+     required GetReceiptDetailsSuccess state
+     //required dynamic key
+   }) {
+     showModalBottomSheet(
+         useSafeArea: true,
+         isScrollControlled: true,
+         context: context,
+         shape: const RoundedRectangleBorder(
+           borderRadius: BorderRadius.vertical(
+             top: Radius.circular(25.0),
+           ),
+         ),
+         builder: (context) => Padding(
+           padding: EdgeInsets.only(
+               bottom: MediaQuery.of(context).viewInsets.bottom,
+               left: 10,
+               right: 10),
+           child: SingleChildScrollView(
+             child: Form(
+               key: _addExternalItemFormKey,
+               child: Column(
+                 mainAxisSize: MainAxisSize.min,
+                 children: [
+                   Text(
+                     "اضافه عنصر خارجي جديد",
+                     style: TextStyle(fontSize: 25.sp, color: Colors.white),
+                   ),
+                   SizedBox(
+                     height: 20.h,
+                   ),
+                   CustomFormField(
+                     keyboardType: TextInputType.name,
+                     hintText: "الاسم",
+                     validator: (value) {
+                       if (value!.trim().isEmpty) {
+                         return "قم باضافه اسم العنصر";
+                       } else {
+                         return null;
+                       }
+                     },
+                     controller: externalNameItemController,
+                   ),
+                   SizedBox(
+                     height: 10.h,
+                   ),
+                   CustomFormField(
+                     keyboardType: TextInputType.number,
+                     hintText: "السعر",
+                     validator: (value) {
+                       if (value!.trim().isEmpty) {
+                         return "قم باضافه سعر العنصر";
+                       }else if(value.contains("-")){
+                         return "مسموح بادخال ارقام موجبه فقط";
+                       }else if(value.contains(",")){
+                         return "مسموح بادخال ارقام فقط";
+                       } else {
+                         return null;
+                       }
+                     },
+                     controller: externalPriceItemController,
+                   ),
+
+                   SizedBox(
+                     height: 40.h,
+                   ),
+                   SizedBox(
+                     width: double.infinity,
+                     child: ElevatedButton(
+                         onPressed: () {
+                           if(_addExternalItemFormKey.currentState!.validate() == false){
+                             return;
+                           }else{
+
+                              // itemQuantity = int.parse(quantityController.text);
+                               newOriginalPrice = state.receiptModel.originalPrice + int.parse(externalPriceItemController.text);
+                               newSellPrice = state.receiptModel.sellPrice + 0;
+                               newNetIncome = newSellPrice - newOriginalPrice;
+                               try{
+                                 state.receiptModel.itemModel.add(
+                                     ItemFromHive(itemModel: ItemModel(
+                                       sellPrice: 0,
+                                       originalPrice: int.parse(externalPriceItemController.text),
+                                       name: externalNameItemController.text,
+                                       quantity: 1,
+                                     ), key: "external key",
+                                         type: "External"
+                                     )
+                                 );
+                                 receiptsBox.putAt(index,
+                                     ReceiptModel(
+                                       name: GetReceiptDetailsCubit.get(getReceiptsContext).nameController.text,
+                                       originalPrice: newOriginalPrice,
+                                       sellPrice: newSellPrice,
+                                       netIncome: newNetIncome,
+                                       itemModel: state.receiptModel.itemModel,
+
+                                     )
+                                 );
+
+                                 externalPriceItemController.clear();
+                                 externalNameItemController.clear();
+                                 Navigator.pop(context);
+                                 GetReceiptDetailsCubit.get(getReceiptsContext).getReceiptDetails(receiptIndex: index);
+                                 buildShowToast("تم الاضافه بنجاح");
+
+                               }catch(e){
+                                 Navigator.pop(context);
+                                 buildShowToast(e.toString());
+                               }
+                             }
+
+
+                         },
+                         child: const Padding(
+                           padding: EdgeInsets.all(8.0),
+                           child: Text(
+                             "اضافه",
+                             style: TextStyle(
+                                 color: Colors.white, fontSize: 20),
+                           ),
+                         )),
+                   ),
+                   SizedBox(
+                     height: 50.h,
+                   ),
+                 ],
+               ),
+             ),
+           ),
+         )).then((value) => quantityController.clear());
+   }
+
+
    List<ItemFromHive> getNonEmptyItems(){
      List<ItemFromHive> nonEmptyQuantityList = [];
      for(int i = 0; i < itemBox.length; i++){
