@@ -19,17 +19,20 @@ class ItemFromHiveAdapter extends TypeAdapter<ItemFromHive> {
     return ItemFromHive(
       itemModel: fields[0] as ItemModel,
       key: fields[1] as dynamic,
+      type: fields[2] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ItemFromHive obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.itemModel)
       ..writeByte(1)
-      ..write(obj.key);
+      ..write(obj.key)
+      ..writeByte(2)
+      ..write(obj.type);
   }
 
   @override

@@ -12,5 +12,8 @@ class ItemFromHive {
   @HiveField(1)
   dynamic key;
 
-  ItemFromHive({required this.itemModel, required this.key});
+  @HiveField(2)
+  String? type;
+
+  ItemFromHive({required this.itemModel, required this.key,this.type});
 }
