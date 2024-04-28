@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
+import 'package:nwara_store/core/mobile.dart';
 import 'package:nwara_store/features/new_receipt_details/get_receipt_details_cubit.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 import '../../../../core/general_components/build_show_toast.dart';
 import '../../../../core/general_components/color_helper.dart';
 import '../../../../core/general_components/custom_form_field.dart';
@@ -38,8 +43,6 @@ class NewReceiptDetailsScreen extends StatelessWidget {
    num newSellPrice = 0;
    num newNetIncome = 0;
 
-
-
    @override
   Widget build(BuildContext context) {
      int argument = ModalRoute.of(context)!.settings.arguments as int;
@@ -57,7 +60,16 @@ class NewReceiptDetailsScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text("تفاصيل الفاتورة"),
           actions: [
-            TextButton.icon(
+            IconButton(
+              onPressed: (){
+
+                  createPdf(state.receiptModel.name,state);
+
+
+              },
+              icon: const Icon(Icons.print,color: Colors.blue,),
+            ),
+            IconButton(
               onPressed: (){
                 DialogUtilities.showMessage(
                     context, "هل انت متاكد من مسح هذه الفاتورة؟",
@@ -70,10 +82,8 @@ class NewReceiptDetailsScreen extends StatelessWidget {
                 );
               },
               icon: const Icon(Icons.delete,color: Colors.red,),
-              label: const Text("مسح",style: TextStyle(
-                  color: Colors.red
-              ),),
-            )
+            ),
+
           ],
         ),
         body: Padding(
@@ -554,6 +564,172 @@ class NewReceiptDetailsScreen extends StatelessWidget {
 
   }
 
+   Future<List<int>> _readFontData() async {
+     final ByteData bytes = await rootBundle.load('assets/font/arial.ttf');
+     return bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+   }
+
+  Future<void> createPdf(String pdfName,GetReceiptDetailsSuccess state)async{
+    PdfDocument document = PdfDocument();
+    final page = document.pages.add();
+    PdfFont font = PdfTrueTypeFont(await _readFontData(), 15);
+   // PdfFont font =  PdfTrueTypeFont(File('assets/font/arial.ttf').readAsBytesSync(), 12);
+    page.graphics.drawString("Nwara Store",
+    PdfStandardFont(
+        PdfFontFamily.helvetica, 30),
+        //bounds: const Rect.fromLTWH(0, 0, 0, 0)
+    );
+    page.graphics.drawString("فاتوره  ${state.receiptModel.name}",
+      font,
+        bounds: const Rect.fromLTRB(0, 0, 850, 20),
+      format: PdfStringFormat(
+        alignment: PdfTextAlignment.center,
+        lineAlignment: PdfVerticalAlignment.middle,
+        textDirection: PdfTextDirection.rightToLeft
+      ),
+    );
+
+    PdfGrid grid = PdfGrid();
+    grid.columns.add(count: 5);
+    grid.headers.add(1);
+    PdfGridRow header = grid.headers[0];
+    header.cells[4].value = "اسم الصنف";
+    header.cells[4].style = PdfGridCellStyle(
+        font: font,
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255))
+    );
+    header.cells[0].stringFormat = PdfStringFormat(
+        textDirection: PdfTextDirection.rightToLeft,
+      alignment: PdfTextAlignment.center,
+      lineAlignment: PdfVerticalAlignment.middle,);
+    header.cells[3].value = "العدد";
+    header.cells[3].style = PdfGridCellStyle(
+        font: font,
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255))
+    );
+    header.cells[1].stringFormat = PdfStringFormat(
+        textDirection: PdfTextDirection.rightToLeft,
+      alignment: PdfTextAlignment.center,
+      lineAlignment: PdfVerticalAlignment.middle,);
+    header.cells[2].value = "السعر الاصلي";
+    header.cells[2].style = PdfGridCellStyle(
+        font: font,
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255))
+    );
+    header.cells[2].stringFormat = PdfStringFormat(
+        textDirection: PdfTextDirection.rightToLeft,
+      alignment: PdfTextAlignment.center,
+      lineAlignment: PdfVerticalAlignment.middle,);
+    header.cells[1].value = "سعر البيع";
+    header.cells[1].style = PdfGridCellStyle(
+        font: font,
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255))
+    );
+    header.cells[3].style = PdfGridCellStyle(
+        font: font,
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255))
+    );
+    header.cells[3].stringFormat = PdfStringFormat(
+        textDirection: PdfTextDirection.rightToLeft,
+      alignment: PdfTextAlignment.center,
+      lineAlignment: PdfVerticalAlignment.middle,);
+    header.cells[0].value = "صافي الربح";
+    header.cells[0].style = PdfGridCellStyle(
+        font: font,
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255))
+    );
+    header.cells[4].stringFormat = PdfStringFormat(
+        textDirection: PdfTextDirection.rightToLeft,
+      alignment: PdfTextAlignment.center,
+      lineAlignment: PdfVerticalAlignment.middle,);
+
+    header.style = PdfGridCellStyle(font: font,
+        format: PdfStringFormat(textDirection: PdfTextDirection.rightToLeft)
+    );
+    PdfGridRow row = grid.rows.add();
+//PdfGridRow(PdfGrid(), style: PdfGridCellStyle(font: font))
+    for(int i = 0; i< state.receiptModel.itemModel.length; i++){
+      row.cells[3].value = "${state.receiptModel.itemModel[i].itemModel.quantity}";
+      row.cells[3].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+      row.cells[3].stringFormat = PdfStringFormat(
+        alignment: PdfTextAlignment.center,
+        lineAlignment: PdfVerticalAlignment.middle,);
+      row.cells[2].value = "${state.receiptModel.itemModel[i].itemModel.originalPrice}";
+      row.cells[2].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+      row.cells[2].stringFormat = PdfStringFormat(
+        alignment: PdfTextAlignment.center,
+        lineAlignment: PdfVerticalAlignment.middle,);
+      row.cells[1].value = "${state.receiptModel.itemModel[i].itemModel.sellPrice}";
+      row.cells[1].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+      row.cells[1].stringFormat = PdfStringFormat(
+        alignment: PdfTextAlignment.center,
+        lineAlignment: PdfVerticalAlignment.middle,);
+      row.cells[0].value = "${(state.receiptModel.itemModel[i].itemModel.sellPrice)-(state.receiptModel.itemModel[i].itemModel.originalPrice)}";
+      row.cells[0].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+      row.cells[0].stringFormat = PdfStringFormat(
+        alignment: PdfTextAlignment.center,
+        lineAlignment: PdfVerticalAlignment.middle,);
+      row.cells[4].value = state.receiptModel.itemModel[i].itemModel.name;
+      row.cells[4].style = PdfGridCellStyle(font: font);
+
+      row.cells[4].stringFormat = PdfStringFormat(
+        textDirection: PdfTextDirection.rightToLeft,
+        alignment: PdfTextAlignment.center,
+        lineAlignment: PdfVerticalAlignment.middle,);
+      row = grid.rows.add();
+    }
+    row.cells[3].value = "${state.receiptModel.itemModel.length}";
+    row.cells[3].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+    row.cells[3].stringFormat = PdfStringFormat(
+      alignment: PdfTextAlignment.center,
+      lineAlignment: PdfVerticalAlignment.middle,);
+    row.cells[2].value = "${state.receiptModel.originalPrice}";
+    row.cells[2].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+    row.cells[2].stringFormat = PdfStringFormat(
+      alignment: PdfTextAlignment.center,
+      lineAlignment: PdfVerticalAlignment.middle,);
+
+    row.cells[1].value = "${state.receiptModel.sellPrice}";
+    row.cells[1].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+    row.cells[1].stringFormat = PdfStringFormat(
+      alignment: PdfTextAlignment.center,
+      lineAlignment: PdfVerticalAlignment.middle,);
+    row.cells[0].value = "${state.receiptModel.netIncome}";
+    row.cells[0].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+    row.cells[0].stringFormat = PdfStringFormat(
+      alignment: PdfTextAlignment.center,
+      lineAlignment: PdfVerticalAlignment.middle,);
+    row.cells[4].value = "المجموع";
+    row.cells[4].style = PdfGridCellStyle(
+        font: font,
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+      textBrush: PdfSolidBrush(PdfColor(255, 255, 255))
+    );
+    row.cells[4].stringFormat = PdfStringFormat(
+      textDirection: PdfTextDirection.rightToLeft,
+      alignment: PdfTextAlignment.center,
+      lineAlignment: PdfVerticalAlignment.middle,);
+    row = grid.rows.add();
+    try{
+      grid.draw(page: document.pages[0],
+          bounds: const Rect.fromLTRB(0, 100, 0, 0)
+      );
+    }catch(e){
+      buildShowToast(e.toString());
+    }
+
+     List<int> bytes = await document.save();
+     document.dispose();
+
+     saveAndLunchFile(bytes, "$pdfName.pdf");
+  }
+
    void _showAddItem({
      required BuildContext context,
      required int index,
@@ -638,7 +814,9 @@ class NewReceiptDetailsScreen extends StatelessWidget {
                          return "قم باضافه الكميه للعنصر";
                        }else if(value.contains("-")){
                          return "مسموح بادخال ارقام موجبه فقط";
-                       } else {
+                       }else if(value.contains(",")){
+                         return "غير مسموح بادخال الفاصله";
+                       }else {
                          return null;
                        }
                      },
@@ -815,8 +993,8 @@ class NewReceiptDetailsScreen extends StatelessWidget {
                        }else if(value.contains("-")){
                          return "مسموح بادخال ارقام موجبه فقط";
                        }else if(value.contains(",")){
-                         return "مسموح بادخال ارقام فقط";
-                       } else {
+                         return "غير مسموح بادخال الفاصله";
+                       }else {
                          return null;
                        }
                      },

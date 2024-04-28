@@ -398,6 +398,8 @@ final TextEditingController searchController = TextEditingController();
                         return "قم باضافه الكميه للعنصر";
                       }else if(value.contains("-")){
                         return "مسموح بادخال ارقام موجبه فقط";
+                      }else if(value.contains(",")){
+                        return "غير مسموح بادخال الفاصله";
                       } else {
                         return null;
                       }
@@ -415,6 +417,8 @@ final TextEditingController searchController = TextEditingController();
                         return "قم باضافه السعر الاساسي للعنصر";
                       }else if(value.contains("-")){
                         return "مسموح بادخال ارقام موجبه فقط";
+                      }else if(value.contains(",")){
+                        return "غير مسموح بادخال الفاصله";
                       }
                       else {
                         return null;
@@ -433,6 +437,8 @@ final TextEditingController searchController = TextEditingController();
                         return "قم باضافه سعر البيع للعنصر";
                       }else if(value.contains("-")){
                         return "مسموح بادخال ارقام موجبه فقط";
+                      }else if(value.contains(",")){
+                        return "غير مسموح بادخال الفاصله";
                       } else {
                         return null;
                       }
