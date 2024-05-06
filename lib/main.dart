@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
       useInheritedMediaQuery: true,
       child: MaterialApp(
         title: 'Nwara Store',
+        darkTheme: themeData(context),
         themeMode: ThemeMode.dark,
         debugShowCheckedModeBanner: false,
         theme: themeData(context),
