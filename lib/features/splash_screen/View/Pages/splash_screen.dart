@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:nwara_store/core/general_components/color_helper.dart';
 import 'package:nwara_store/features/home_screen/view/pages/home_screen.dart';
 
@@ -9,7 +10,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if(context.mounted){
         Navigator.pushReplacementNamed(context, HomeScreen.routeName);
       }
@@ -23,22 +24,28 @@ class SplashScreen extends StatelessWidget {
           height: double.infinity,
           width: double.infinity,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Spacer(),
-             Center(
-                 child: Image.asset("assets/images/img.png",width: 150,height: 150,)),
-              const Spacer(),
-              const Text(
-                '0.2.0 ( Beta )',
-                style: TextStyle(
-                    color: ColorHelper.mainColor, fontSize: 15),
-              ),
-
+              Center(
+                  child: Lottie.asset("assets/json_lottie/mSPxqTWZnc.json",
+                    width: 250,
+                    height: 250,
+                   // fit: BoxFit.fill,
+                  )
+                      ),
+               Hero(
+                tag: "logo",
+                child: Text("Nwara Store",style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: ColorHelper.mainColor,
+                    fontFamily: "Cairo"
+                ),),
+              )
             ],
           ),
-        ),
       ),
-    );
+    ));
   }
 
 }

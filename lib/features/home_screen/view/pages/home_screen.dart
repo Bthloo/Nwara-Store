@@ -38,7 +38,67 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             appBar: AppBar(
-              title: const Text("Nwara Store"),
+              // actions: [
+              //   IconButton(
+              //     onPressed: () {
+              //       showDialog(
+              //           context: context,
+              //
+              //           builder: (context) {
+              //             return AlertDialog(
+              //               title: Row(
+              //                 children: [
+              //                   Image.asset("assets/images/img.png",
+              //                     height: 40,
+              //                     width: 40,
+              //                   ),
+              //                   const SizedBox(width: 5,),
+              //                   const Column(
+              //                     crossAxisAlignment: CrossAxisAlignment.start,
+              //                     children: [
+              //                       Text("Nwara Store"),
+              //                       SizedBox(height: 5,),
+              //                       Text("1.0.0",style: TextStyle(
+              //                         fontSize: 12,
+              //                         color: Colors.white
+              //                       ),),
+              //                     ],
+              //                   ),
+              //                 ],
+              //               ),
+              //               content: const Row(
+              //                 mainAxisAlignment: MainAxisAlignment.center,
+              //                 children: [
+              //                   Text(
+              //                       "© Bthloo"),
+              //                   Text(
+              //                       "جميع الحقوق محفوظه لدى"),
+              //                 ],
+              //               ),
+              //               actions: [
+              //                 TextButton(
+              //                     onPressed: () {
+              //                       Navigator.pop(context);
+              //                     },
+              //                     child: const Text("حسنا",style: TextStyle(
+              //                       color: ColorHelper.mainColor
+              //                     ),))
+              //               ],
+              //             );
+              //           },);
+              //     },
+              //     icon: const Icon(Icons.info_outline),
+              //   ),
+              // ],
+              title:  Hero(
+                tag: "logo",
+                child: Text("Nwara Store",style:  Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: ColorHelper.mainColor,
+                    fontFamily: "Cairo"
+                ),),
+              )
             ),
             body: BottomAppBarCubit.get(context).tabs
             [BottomAppBarCubit.get(context).currentTapIndex],
@@ -51,8 +111,6 @@ class HomeScreen extends StatelessWidget {
 
 
 }
-
-
 
 
 

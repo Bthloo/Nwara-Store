@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -118,14 +119,13 @@ class ReceiptTab extends StatelessWidget {
                               child: Text(state.receipts[index].name,
                                 textDirection: TextDirection.rtl,
                                 style: TextStyle(
-
                                   overflow: TextOverflow.ellipsis,
                                   color: ColorHelper.darkColor,
                                   fontSize: 20.sp,
                                   //fontWeight: FontWeight.w500
                                 ),
                                 textAlign: TextAlign.center,
-                              ),
+                              ) ,
                             ),
                           ),
 
@@ -171,7 +171,7 @@ class ReceiptTab extends StatelessWidget {
                           //       ],
                           //     )),
                         ),
-                      );
+                      ).animate().shimmer();
                     },
                   );
                 }

@@ -4,7 +4,20 @@ import 'color_helper.dart';
 
 ThemeData themeData(BuildContext context) {
   return ThemeData(
+    textTheme: const TextTheme(
+      titleMedium:  TextStyle(
+          color: ColorHelper.mainColor,
+          fontSize: 25,
+          fontFamily: "Cairo",
+          fontWeight: FontWeight.bold
+      ),
+    ),
     dialogTheme: const DialogTheme(
+      titleTextStyle: TextStyle(
+          color: ColorHelper.mainColor,
+          fontSize: 20,
+
+      ),
       backgroundColor: ColorHelper.darkColor,
       contentTextStyle: TextStyle(
           color: Colors.white
