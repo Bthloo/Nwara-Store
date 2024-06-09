@@ -97,7 +97,7 @@ class ReceiptTab extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           style: const ButtonStyle(
-                              shape: MaterialStatePropertyAll(
+                              shape: WidgetStatePropertyAll(
                                   RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
                               )
                           ),

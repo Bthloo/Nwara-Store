@@ -108,7 +108,7 @@ final TextEditingController searchController = TextEditingController();
                                                     itemBuilder: (context, index) {
                                                       return ElevatedButton(
                                                         style: const ButtonStyle(
-                                                            shape: MaterialStatePropertyAll(
+                                                            shape: WidgetStatePropertyAll(
                                                                 RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
                                                             )
                                                         ),
@@ -256,7 +256,7 @@ final TextEditingController searchController = TextEditingController();
                                 ),
                                 child: ElevatedButton(
                                   style: const ButtonStyle(
-                                    shape: MaterialStatePropertyAll(
+                                    shape: WidgetStatePropertyAll(
                                       RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
                                     )
                                   ),

@@ -381,7 +381,7 @@ bool isExpanded = false;
                                   ),
                                   child: ElevatedButton(
                                     style: const ButtonStyle(
-                                        shape: MaterialStatePropertyAll(
+                                        shape: WidgetStatePropertyAll(
                                             RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(5))))),
@@ -741,34 +741,29 @@ bool isExpanded = false;
     PdfGridRow row = grid.rows.add();
 //PdfGridRow(PdfGrid(), style: PdfGridCellStyle(font: font))
     for (int i = 0; i < state.receiptModel.itemModel.length; i++) {
-      row.cells[3].value =
-          "${state.receiptModel.itemModel[i].itemModel.quantity}";
-      row.cells[3].style =
-          PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+      row.cells[3].value = "${state.receiptModel.itemModel[i].itemModel.quantity}";
+      row.cells[3].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
       row.cells[3].stringFormat = PdfStringFormat(
         alignment: PdfTextAlignment.center,
         lineAlignment: PdfVerticalAlignment.middle,
       );
-      row.cells[2].value =
-          "${state.receiptModel.itemModel[i].itemModel.originalPrice}";
-      row.cells[2].style =
-          PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+      row.cells[2].value = "${state.receiptModel.itemModel[i].itemModel.originalPrice}";
+      row.cells[2].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
       row.cells[2].stringFormat = PdfStringFormat(
         alignment: PdfTextAlignment.center,
         lineAlignment: PdfVerticalAlignment.middle,
       );
-      row.cells[1].value =
-          "${state.receiptModel.itemModel[i].itemModel.sellPrice}";
+      row.cells[1].value = "${state.receiptModel.itemModel[i].itemModel.sellPrice}";
       row.cells[1].style =
-          PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+          PdfGridCellStyle(
+              font: PdfStandardFont(PdfFontFamily.helvetica, 15));
       row.cells[1].stringFormat = PdfStringFormat(
         alignment: PdfTextAlignment.center,
         lineAlignment: PdfVerticalAlignment.middle,
       );
-      row.cells[0].value =
-          "${(state.receiptModel.itemModel[i].itemModel.sellPrice) - (state.receiptModel.itemModel[i].itemModel.originalPrice)}";
-      row.cells[0].style =
-          PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
+      row.cells[0].value = "${(state.receiptModel.itemModel[i].itemModel.sellPrice) - (state.receiptModel.itemModel[i].itemModel.originalPrice)}";
+      row.cells[0].style = PdfGridCellStyle(
+          font: PdfStandardFont(PdfFontFamily.helvetica, 15));
       row.cells[0].stringFormat = PdfStringFormat(
         alignment: PdfTextAlignment.center,
         lineAlignment: PdfVerticalAlignment.middle,

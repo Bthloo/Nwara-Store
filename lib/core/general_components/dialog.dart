@@ -48,7 +48,7 @@ class DialogUtilities {
     if (nigaiveActionName != null) {
       actions.add(TextButton(
           style: const ButtonStyle(
-              foregroundColor: MaterialStatePropertyAll(Colors.red),
+              foregroundColor: WidgetStatePropertyAll(Colors.red),
               ),
           onPressed: () {
             Navigator.pop(context);

@@ -28,7 +28,7 @@ ThemeData themeData(BuildContext context) {
     elevatedButtonTheme: const ElevatedButtonThemeData(
       style: ButtonStyle(
 
-        backgroundColor: MaterialStatePropertyAll(
+        backgroundColor: WidgetStatePropertyAll(
             ColorHelper.mainColor
         )
       )
@@ -45,7 +45,7 @@ ThemeData themeData(BuildContext context) {
       ),
     ),
     navigationBarTheme: NavigationBarThemeData(
-        labelTextStyle: MaterialStatePropertyAll(
+        labelTextStyle: WidgetStatePropertyAll(
             TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
