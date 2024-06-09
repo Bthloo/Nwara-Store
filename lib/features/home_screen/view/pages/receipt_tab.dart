@@ -29,7 +29,7 @@ class ReceiptTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        tooltip: "اضافه عنصر جديد",
+        tooltip: "اضافه فاتورة جديدة",
         backgroundColor: ColorHelper.mainColor,
         child: const Icon(
           Icons.add,
@@ -211,7 +211,7 @@ class ReceiptTab extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "اضافه عنصر جديد",
+                    "اضافه فاتورة جديدة",
                     style: TextStyle(fontSize: 25.sp, color: Colors.white),
                   ),
                   SizedBox(

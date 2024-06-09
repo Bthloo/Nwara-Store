@@ -747,13 +747,19 @@ bool isExpanded = false;
         alignment: PdfTextAlignment.center,
         lineAlignment: PdfVerticalAlignment.middle,
       );
-      row.cells[2].value = "${state.receiptModel.itemModel[i].itemModel.originalPrice}";
+      row.cells[2].value =
+      "${state.receiptModel.itemModel[i].itemModel.originalPrice*
+         state.receiptModel.itemModel[i].itemModel.quantity
+      }";
       row.cells[2].style = PdfGridCellStyle(font: PdfStandardFont(PdfFontFamily.helvetica, 15));
       row.cells[2].stringFormat = PdfStringFormat(
         alignment: PdfTextAlignment.center,
         lineAlignment: PdfVerticalAlignment.middle,
       );
-      row.cells[1].value = "${state.receiptModel.itemModel[i].itemModel.sellPrice}";
+      row.cells[1].value =
+      "${state.receiptModel.itemModel[i].itemModel.sellPrice*
+          state.receiptModel.itemModel[i].itemModel.quantity
+      }";
       row.cells[1].style =
           PdfGridCellStyle(
               font: PdfStandardFont(PdfFontFamily.helvetica, 15));
@@ -761,7 +767,9 @@ bool isExpanded = false;
         alignment: PdfTextAlignment.center,
         lineAlignment: PdfVerticalAlignment.middle,
       );
-      row.cells[0].value = "${(state.receiptModel.itemModel[i].itemModel.sellPrice) - (state.receiptModel.itemModel[i].itemModel.originalPrice)}";
+      row.cells[0].value =
+      "${(state.receiptModel.itemModel[i].itemModel.sellPrice*  state.receiptModel.itemModel[i].itemModel.quantity) -
+          (state.receiptModel.itemModel[i].itemModel.originalPrice*  state.receiptModel.itemModel[i].itemModel.quantity)}";
       row.cells[0].style = PdfGridCellStyle(
           font: PdfStandardFont(PdfFontFamily.helvetica, 15));
       row.cells[0].stringFormat = PdfStringFormat(
@@ -882,8 +890,11 @@ bool isExpanded = false;
                             ),
                             fit: FlexFit.loose),
                         items: getNonEmptyItems(),
+
                         itemAsString: (item) {
-                          return " الاسم: ${item.itemModel.name} ------ الكميه : ${item.itemModel.quantity}";
+                          return " ${item.itemModel.name} : الاسم  "
+                              "\n ${item.itemModel.quantity} : الكميه  "
+                              "---------------------------------------\n";
                         },
                         validator: (value) {
                           if (value == null) {
@@ -906,6 +917,8 @@ bool isExpanded = false;
                             return "مسموح بادخال ارقام موجبه فقط";
                           } else if (value.contains(",")) {
                             return "غير مسموح بادخال الفاصله";
+                          }else if(value.contains(".")){
+                            return "غير مسموح بالارقام العشريه";
                           } else {
                             return null;
                           }
@@ -1116,14 +1129,14 @@ bool isExpanded = false;
                                 // itemQuantity = int.parse(quantityController.text);
                                 newOriginalPrice = state
                                         .receiptModel.originalPrice +
-                                    int.parse(externalPriceItemController.text);
+                                    num.parse(externalPriceItemController.text);
                                 newSellPrice = state.receiptModel.sellPrice + 0;
                                 newNetIncome = newSellPrice - newOriginalPrice;
                                 try {
                                   state.receiptModel.itemModel.add(ItemFromHive(
                                       itemModel: ItemModel(
                                         sellPrice: 0,
-                                        originalPrice: int.parse(
+                                        originalPrice: num.parse(
                                             externalPriceItemController.text),
                                         name: externalNameItemController.text,
                                         quantity: 1,

@@ -401,6 +401,8 @@ final TextEditingController searchController = TextEditingController();
                         return "مسموح بادخال ارقام موجبه فقط";
                       }else if(value.contains(",")){
                         return "غير مسموح بادخال الفاصله";
+                      }else if(value.contains(".")){
+                        return "غير مسموح بالارقام العشريه";
                       } else {
                         return null;
                       }
