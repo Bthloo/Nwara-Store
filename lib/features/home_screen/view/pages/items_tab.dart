@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -232,6 +233,7 @@ final TextEditingController searchController = TextEditingController();
                                           "هل انت متاكد من مسح هذا العنصر؟",
                                           nigaiveActionName: "مسح",
                                           nigaiveAction: () async {
+                                            HapticFeedback.heavyImpact();
                                             try {
                                               await itemBox.deleteAt(index);
                                               if (context.mounted) {
@@ -455,6 +457,7 @@ final TextEditingController searchController = TextEditingController();
                     bloc: addItemCubit,
                     listener: (context, state) {
                       if (state is AddItemFailed) {
+                        HapticFeedback.heavyImpact();
                         buildShowToast(state.message);
                       } else if (state is AddItemSuccess) {
                         addItemCubit.sellPriceController.clear();
@@ -510,6 +513,7 @@ final TextEditingController searchController = TextEditingController();
 
   addItemm( BuildContext context) {
     if (_formKey.currentState!.validate() == false) {
+      HapticFeedback.heavyImpact();
       return;
     } else {
       addItemCubit.addItem(ItemModel(

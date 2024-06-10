@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:nwara_store/core/general_components/build_show_toast.dart';
@@ -33,6 +34,8 @@ class ItemDetailsScreen extends StatelessWidget {
         actions: [
           TextButton.icon(
               onPressed: (){
+                HapticFeedback.heavyImpact();
+
                 DialogUtilities.showMessage(
                     context, "هل انت متاكد من مسح هذا العنصر؟",
                     nigaiveAction: ()async{
@@ -133,6 +136,7 @@ class ItemDetailsScreen extends StatelessWidget {
                   child: ElevatedButton(
                       onPressed: () {
                         if(_formKey.currentState!.validate()== false) {
+                          HapticFeedback.heavyImpact();
                           return;
                         }else{
                           try{

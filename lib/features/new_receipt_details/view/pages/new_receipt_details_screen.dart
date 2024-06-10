@@ -74,6 +74,7 @@ bool isExpanded = false;
                   ),
                   IconButton(
                     onPressed: () {
+                      HapticFeedback.heavyImpact();
                       DialogUtilities.showMessage(
                           context, "هل انت متاكد من مسح هذه الفاتورة؟",
                           nigaiveAction: () async {
@@ -101,6 +102,7 @@ bool isExpanded = false;
                           onPressed: () {
                             if (_nameFormKey.currentState!.validate() ==
                                 false) {
+                              HapticFeedback.heavyImpact();
                               return;
                             } else {
                               try {
@@ -894,7 +896,7 @@ bool isExpanded = false;
                         itemAsString: (item) {
                           return " ${item.itemModel.name} : الاسم  "
                               "\n ${item.itemModel.quantity} : الكميه  "
-                              "---------------------------------------\n";
+                              "---------------------------------------";
                         },
                         validator: (value) {
                           if (value == null) {
@@ -934,6 +936,8 @@ bool isExpanded = false;
                             onPressed: () {
                               if (_addItemFormKey.currentState!.validate() ==
                                   false) {
+                                HapticFeedback.heavyImpact();
+
                                 return;
                               } else {
                                 if (int.parse(quantityController.text) >
@@ -1124,6 +1128,8 @@ bool isExpanded = false;
                               if (_addExternalItemFormKey.currentState!
                                       .validate() ==
                                   false) {
+                                HapticFeedback.heavyImpact();
+
                                 return;
                               } else {
                                 // itemQuantity = int.parse(quantityController.text);

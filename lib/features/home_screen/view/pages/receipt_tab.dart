@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,9 +68,11 @@ class ReceiptTab extends StatelessWidget {
                         endActionPane: ActionPane(
                           extentRatio: .25,
                           motion: const DrawerMotion(),
+
                           children: [
                             SlidableAction(
                               onPressed:(buildContext){
+                                HapticFeedback.heavyImpact();
                                 DialogUtilities.showMessage(
                                     context, "هل انت متاكد من مسح هذا العنصر؟",
                                   nigaiveActionName: "مسح",
@@ -95,81 +99,176 @@ class ReceiptTab extends StatelessWidget {
                             )
                           ],
                         ),
-                        child: ElevatedButton(
-                          style: const ButtonStyle(
-                              shape: WidgetStatePropertyAll(
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
-                              )
-                          ),
-                          onPressed: (){
-                            Navigator.pushNamed(context,
-                                NewReceiptDetailsScreen.routeName,
-                                arguments: index
-                            ).then((value) => GetReceiptsCubit.get(context).getReceipts());
-                            // Navigator.pushNamed(
-                            //     context,
-                            //     ReceiptDetailsScreen.routeName,
-                            //     arguments:ReceiptArgument(receiptModel: state.receipts[index], index: index)
-                            // ).then((value) => GetReceiptsCubit.get(context).getReceipts());
-                          },
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: 60.h,
-                            child: Center(
-                              child: Text(state.receipts[index].name,
-                                textDirection: TextDirection.rtl,
-                                style: TextStyle(
-                                  overflow: TextOverflow.ellipsis,
+                        child: CupertinoContextMenu(
+                          enableHapticFeedback: true,
+                          actions:  [
+                            Material(
+                              child: Container(
+                                padding: const EdgeInsets.all(20.0),
+                                decoration: BoxDecoration(
                                   color: ColorHelper.darkColor,
-                                  fontSize: 20.sp,
-                                  //fontWeight: FontWeight.w500
+                                  border: Border.all(color: ColorHelper.mainColor),
+                                  borderRadius: BorderRadius.circular(13)),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                      child: Row(
+                                       // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(state.receipts[index].itemModel.length.toString(),
+                                            style: const TextStyle(
+                                              color: ColorHelper.mainColor,
+                                            fontSize: 18,
+                                          ),),
+                                          const Spacer(),
+                                          const Text("عدد العناصر",style: TextStyle(
+                                            color: ColorHelper.mainColor,
+                                            fontSize: 18,
+                                          ),),
+                                        ],
+                                      ),
+                                    ),
+                                    const Divider(),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                      child: Row(
+                                        //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(state.receipts[index].originalPrice.toString(),
+                                            style: const TextStyle(
+                                              color: ColorHelper.mainColor,
+                                            fontSize: 18,
+                                          ),),
+                                          const Spacer(),
+                                          const Text("السعر الاصلي",style: TextStyle(
+                                              color: ColorHelper.mainColor,
+                                            fontSize: 18,
+                                          ),),
+                                        ],
+                                      ),
+                                    ),
+                                    const Divider(),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                      child: Row(
+                                        //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(state.receipts[index].sellPrice.toString(),
+                                            style: const TextStyle(
+                                              color: ColorHelper.mainColor,
+                                            fontSize: 18,
+                                          ),),
+                                          const Spacer(),
+                                          const Text("سعر البيع",style: TextStyle(
+                                              color: ColorHelper.mainColor,
+                                            fontSize: 18,
+                                          ),),
+                                        ],
+                                      ),
+                                    ),
+                                    const Divider(),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                      child: Row(
+                                        //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(state.receipts[index].netIncome.toString(),
+                                            style: const TextStyle(
+                                              color: ColorHelper.mainColor,
+                                            fontSize: 18,
+                                          ),),
+                                          const Spacer(),
+                                          const Text("الربح",style: TextStyle(
+                                              color: ColorHelper.mainColor,
+                                            fontSize: 18,
+                                          ),),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+
                                 ),
-                                textAlign: TextAlign.center,
-                              ) ,
+                              ),
+                            )
+                          ],
+                          child: ElevatedButton(
+                            style: const ButtonStyle(
+                                shape: WidgetStatePropertyAll(
+                                    RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
+                                )
                             ),
+                            onPressed: (){
+                              //HapticFeedback.heavyImpact();
+                              Navigator.pushNamed(context,
+                                  NewReceiptDetailsScreen.routeName,
+                                  arguments: index
+                              ).then((value) => GetReceiptsCubit.get(context).getReceipts());
+                              // Navigator.pushNamed(
+                              //     context,
+                              //     ReceiptDetailsScreen.routeName,
+                              //     arguments:ReceiptArgument(receiptModel: state.receipts[index], index: index)
+                              // ).then((value) => GetReceiptsCubit.get(context).getReceipts());
+                            },
+                            child: SizedBox(
+                             // width: double.infinity,
+                              height: 60.h,
+                              child: Center(
+                                child: Text(state.receipts[index].name,
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    color: ColorHelper.darkColor,
+                                    fontSize: 20.sp,
+                                    //fontWeight: FontWeight.w500
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ) ,
+                              ),
+                            ),
+
+
+                            // Container(
+                            //     padding: const EdgeInsets.all(8),
+                            //
+                            //     child: Column(
+                            //       children: [
+                            //         Text(state.receipts[index].name,
+                            //           textDirection: TextDirection.rtl,
+                            //           style: TextStyle(
+                            //             overflow: TextOverflow.ellipsis,
+                            //             color: ColorHelper.darkColor,
+                            //             fontSize: 20.sp,
+                            //             //fontWeight: FontWeight.w500
+                            //           ),
+                            //         ),
+                            //         SizedBox(height: 5.h,),
+                            //         Row(
+                            //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            //           children: [
+                            //             Text("سعر البيع : ${state.receipts[index].sellPrice}",
+                            //               textDirection: TextDirection.rtl,
+                            //               style: TextStyle(
+                            //                 overflow: TextOverflow.ellipsis,
+                            //                 color: ColorHelper.darkColor,
+                            //                 fontSize: 17.sp,
+                            //                 //fontWeight: FontWeight.w500
+                            //               ),
+                            //             ),
+                            //             Text("السعر الاصلي : ${state.receipts[index].originalPrice}",
+                            //               textDirection: TextDirection.rtl,
+                            //               style: TextStyle(
+                            //                 overflow: TextOverflow.ellipsis,
+                            //                 color: ColorHelper.darkColor,
+                            //                 fontSize: 17.sp,
+                            //                 //fontWeight: FontWeight.w500
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         )
+                            //       ],
+                            //     )),
                           ),
-
-
-                          // Container(
-                          //     padding: const EdgeInsets.all(8),
-                          //
-                          //     child: Column(
-                          //       children: [
-                          //         Text(state.receipts[index].name,
-                          //           textDirection: TextDirection.rtl,
-                          //           style: TextStyle(
-                          //             overflow: TextOverflow.ellipsis,
-                          //             color: ColorHelper.darkColor,
-                          //             fontSize: 20.sp,
-                          //             //fontWeight: FontWeight.w500
-                          //           ),
-                          //         ),
-                          //         SizedBox(height: 5.h,),
-                          //         Row(
-                          //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          //           children: [
-                          //             Text("سعر البيع : ${state.receipts[index].sellPrice}",
-                          //               textDirection: TextDirection.rtl,
-                          //               style: TextStyle(
-                          //                 overflow: TextOverflow.ellipsis,
-                          //                 color: ColorHelper.darkColor,
-                          //                 fontSize: 17.sp,
-                          //                 //fontWeight: FontWeight.w500
-                          //               ),
-                          //             ),
-                          //             Text("السعر الاصلي : ${state.receipts[index].originalPrice}",
-                          //               textDirection: TextDirection.rtl,
-                          //               style: TextStyle(
-                          //                 overflow: TextOverflow.ellipsis,
-                          //                 color: ColorHelper.darkColor,
-                          //                 fontSize: 17.sp,
-                          //                 //fontWeight: FontWeight.w500
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         )
-                          //       ],
-                          //     )),
                         ),
                       ).animate().shimmer();
                     },
@@ -237,6 +336,7 @@ class ReceiptTab extends StatelessWidget {
                     bloc: addReceiptsCubit,
                     listener: (context, state) {
                       if (state is AddReceiptFailed) {
+                        HapticFeedback.heavyImpact();
                         buildShowToast(state.message);
                       } else if (state is AddReceiptSuccess) {
                         addReceiptsCubit.nameController.clear();
@@ -293,6 +393,7 @@ class ReceiptTab extends StatelessWidget {
   }
   addItem(ReceiptModel receiptModel, BuildContext context) {
     if (_formKey.currentState!.validate() == false) {
+      HapticFeedback.heavyImpact();
       return;
     } else {
       addReceiptsCubit.addReceipt(receiptModel);

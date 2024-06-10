@@ -37,6 +37,7 @@ class HomeScreen extends StatelessWidget {
                 
               ],
             ),
+
             appBar: AppBar(
               // actions: [
               //   IconButton(
@@ -90,6 +91,17 @@ class HomeScreen extends StatelessWidget {
               //     icon: const Icon(Icons.info_outline),
               //   ),
               // ],
+              //   surfaceTintColor: Colors.transparent,
+              //   backgroundColor: Colors.transparent,
+              //   flexibleSpace: ClipRect(
+              //     child: BackdropFilter(
+              //         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              //         child: Container(
+              //           color: Colors.transparent,
+              //           //color: const Color.fromARGB(200, 36, 36, 38),
+              //         )
+              //     ),
+              //   ),
               title:  Hero(
                 tag: "logo",
                 child: Text("Nwara Store",style:  Theme.of(context).textTheme.titleMedium?.copyWith(
