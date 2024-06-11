@@ -199,6 +199,7 @@ class ReceiptTab extends StatelessWidget {
                                 )
                             ),
                             onPressed: (){
+                             // SystemSound.play(SystemSoundType.alert);
                               //HapticFeedback.heavyImpact();
                               Navigator.pushNamed(context,
                                   NewReceiptDetailsScreen.routeName,

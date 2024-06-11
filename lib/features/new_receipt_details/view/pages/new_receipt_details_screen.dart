@@ -390,9 +390,10 @@ bool isExpanded = false;
                                     onPressed: () {
                                       DialogUtilities.showMessage(
                                           context,
-                                          "${state.receiptModel.itemModel[index].itemModel.name}\n"
-                                          "السعر الاصلي :  ${state.receiptModel.itemModel[index].itemModel.originalPrice}\n "
-                                          "سعر البيع : ${state.receiptModel.itemModel[index].itemModel.sellPrice}\n صافي الربح: ${(state.receiptModel.itemModel[index].itemModel.sellPrice) - (state.receiptModel.itemModel[index].itemModel.originalPrice)}");
+                                          "${state.receiptModel.itemModel[index].itemModel.name}\n\n"
+                                          " السعر الاصلي :  ${state.receiptModel.itemModel[index].itemModel.originalPrice * state.receiptModel.itemModel[index].itemModel.quantity} \n "
+                                          " سعر البيع : ${state.receiptModel.itemModel[index].itemModel.sellPrice * state.receiptModel.itemModel[index].itemModel.quantity} \n "
+                                          " صافي الربح : ${(state.receiptModel.itemModel[index].itemModel.sellPrice* state.receiptModel.itemModel[index].itemModel.quantity) - (state.receiptModel.itemModel[index].itemModel.originalPrice* state.receiptModel.itemModel[index].itemModel.quantity)} ");
                                     },
                                     child: Row(
                                       mainAxisAlignment:

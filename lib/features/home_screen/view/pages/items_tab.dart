@@ -23,7 +23,6 @@ class ItemsTab extends StatelessWidget {
   final AddItemCubit addItemCubit = AddItemCubit();
   //GetAllItemsCubit getAllItems = GetAllItemsCubit();
   final itemBox = Hive.box<ItemModel>("items");
-
   late BuildContext? getAllItemsContext ;
 final TextEditingController searchController = TextEditingController();
   @override
@@ -62,158 +61,172 @@ final TextEditingController searchController = TextEditingController();
                   } else {
                     return Column(
                       children: [
-                        TextButton.icon(
-                            onPressed: (){
-                              cubit.searchItem = [];
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Dialog(
-                                    child:
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: StatefulBuilder(
-                                          builder: (context, setState) {
-                                            return Column(
-                                              children: [
-                                                TextButton.icon(
-                                                    onPressed: (){
-                                                      Navigator.pop(context);
-                                                    },
-                                                   label: const Text("اغلاق"),
-                                                  icon: const Icon(Icons.close),
-                                                ),
-                                                SizedBox(height: 10.h,),
-                                                CustomFormField(
-                                                  focus : true,
-                                                    onChange: (value) {
-                                                      cubit.searchController.text = value!;
-
-                                                      setState((){
-                                                        cubit.getSearchItem(value);
-                                                      });
-                                                    },
-                                                    hintText: "بحث",
-                                                    validator: (p0) {
-                                                      return null;
-                                                    },
-                                                    controller: cubit.searchController
-                                                ),
-                                                SizedBox(height: 10.h,),
-                                                Expanded(
-                                                  child: ListView.separated(
-                                                    itemCount: cubit.searchItem.length,
-                                                    separatorBuilder: (context, index) => SizedBox(
-                                                      height: 5.h,
-                                                    ),
-                                                    itemBuilder: (context, index) {
-                                                      return ElevatedButton(
-                                                        style: const ButtonStyle(
-                                                            shape: WidgetStatePropertyAll(
-                                                                RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
-                                                            )
-                                                        ),
-                                                        onPressed: (){
-                                                         // Navigator.pop(context);
-                                                          Navigator.pushNamed(
-                                                              context,
-                                                              ItemDetailsScreen.routeName,
-                                                              arguments: Argument(
-                                                                  index: index,
-                                                                  itemFromHive: cubit.searchItem[index]))
-                                                              .then((value){
-                                                            GetAllItemsCubit.get(getAllItemsContext)
-                                                                .getAllItems();
-                                                            if(Navigator.canPop(context)){
-                                                              Navigator.pop(context);
-                                                            }
-
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                            padding: const EdgeInsets.all(8),
-                                                            // decoration: BoxDecoration(
-                                                            //     color: ColorHelper.mainColor,
-                                                            //     borderRadius: BorderRadius.circular(12),
-                                                            //     border: Border.all(
-                                                            //         color: ColorHelper.mainColor)),
-                                                            child: Column(
-                                                              children: [
-
-                                                                Text(
-                                                                  cubit.searchItem[index].itemModel.name,
-                                                                  textDirection: TextDirection.rtl,
-                                                                  style: TextStyle(
-                                                                    overflow: TextOverflow.ellipsis,
-                                                                    color: ColorHelper.darkColor,
-                                                                    fontSize: 15.sp,
-                                                                    //fontWeight: FontWeight.w500
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 5.h,
-                                                                ),
-                                                                Text(
-                                                                  "الكميه : ${cubit.searchItem[index].itemModel.quantity}",
-                                                                  textDirection: TextDirection.rtl,
-                                                                  style: TextStyle(
-                                                                    overflow: TextOverflow.ellipsis,
-                                                                    color: ColorHelper.darkColor,
-                                                                    fontSize: 13.sp,
-                                                                    //fontWeight: FontWeight.w500
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 5.h,
-                                                                ),
-                                                                Row(
-                                                                  mainAxisAlignment:
-                                                                  MainAxisAlignment.spaceAround,
-                                                                  children: [
-                                                                    Text(
-                                                                      "سعر البيع : ${cubit.searchItem[index].itemModel.sellPrice}",
-                                                                      textDirection: TextDirection.rtl,
-                                                                      style: TextStyle(
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                        color: ColorHelper.darkColor,
-                                                                        fontSize: 13.sp,
-                                                                        //fontWeight: FontWeight.w500
-                                                                      ),
-                                                                    ),
-                                                                    Text(
-                                                                      "السعر الاصلي : ${cubit.searchItem[index].itemModel.originalPrice}",
-                                                                      textDirection: TextDirection.rtl,
-                                                                      style: TextStyle(
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                        color: ColorHelper.darkColor,
-                                                                        fontSize: 13.sp,
-                                                                        //fontWeight: FontWeight.w500
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                )
-                                                              ],
-                                                            )),
-                                                      );
-                                                    },
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton.icon(
+                              onPressed: (){
+                                cubit.searchItem = [];
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      child:
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: StatefulBuilder(
+                                            builder: (context, setState) {
+                                              return Column(
+                                                children: [
+                                                  TextButton.icon(
+                                                      onPressed: (){
+                                                        Navigator.pop(context);
+                                                      },
+                                                     label: const Text("اغلاق"),
+                                                    icon: const Icon(Icons.close),
                                                   ),
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                                  SizedBox(height: 10.h,),
+                                                  CustomFormField(
+                                                    focus : true,
+                                                      onChange: (value) {
+                                                        cubit.searchController.text = value!;
+                                                        setState((){
+                                                          cubit.getSearchItem(value);
+                                                        });
+                                                      },
+                                                      hintText: "بحث",
+                                                      validator: (p0) {
+                                                        return null;
+                                                      },
+                                                      controller: cubit.searchController
+                                                  ),
+                                                  SizedBox(height: 10.h,),
+                                                  Expanded(
+                                                    child: ListView.separated(
+                                                      itemCount: cubit.searchItem.length,
+                                                      separatorBuilder: (context, index) => SizedBox(
+                                                        height: 5.h,
+                                                      ),
+                                                      itemBuilder: (context, index) {
+                                                        return Stack(
+                                                          alignment: Alignment.topRight,
+                                                          children:[
+                                                            ElevatedButton(
+                                                            style: const ButtonStyle(
+                                                                shape: WidgetStatePropertyAll(
+                                                                    RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
+                                                                )
+                                                            ),
+                                                            onPressed: (){
+                                                             // Navigator.pop(context);
+                                                              Navigator.pushNamed(
+                                                                  context,
+                                                                  ItemDetailsScreen.routeName,
+                                                                  arguments: Argument(
+                                                                      index: index,
+                                                                      itemFromHive: cubit.searchItem[index]))
+                                                                  .then((value){
+                                                                GetAllItemsCubit.get(getAllItemsContext)
+                                                                    .getAllItems();
+                                                                if(Navigator.canPop(context)){
+                                                                  Navigator.pop(context);
+                                                                }
+
+                                                              });
+                                                            },
+                                                            child: Container(
+                                                                padding: const EdgeInsets.all(8),
+                                                                // decoration: BoxDecoration(
+                                                                //     color: ColorHelper.mainColor,
+                                                                //     borderRadius: BorderRadius.circular(12),
+                                                                //     border: Border.all(
+                                                                //         color: ColorHelper.mainColor)),
+                                                                child: Column(
+                                                                  children: [
+
+                                                                    Text(
+                                                                      cubit.searchItem[index].itemModel.name,
+                                                                      textDirection: TextDirection.rtl,
+                                                                      style: TextStyle(
+                                                                        overflow: TextOverflow.ellipsis,
+                                                                        color: ColorHelper.darkColor,
+                                                                        fontSize: 15.sp,
+                                                                        //fontWeight: FontWeight.w500
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: 5.h,
+                                                                    ),
+                                                                    Text(
+                                                                      "الكميه : ${cubit.searchItem[index].itemModel.quantity}",
+                                                                      textDirection: TextDirection.rtl,
+                                                                      style: TextStyle(
+                                                                        overflow: TextOverflow.ellipsis,
+                                                                        color: cubit.searchItem[index].itemModel.quantity == 0 ?
+                                                                        Colors.red : ColorHelper.darkColor,
+                                                                        fontSize: 13.sp,
+                                                                        //fontWeight: FontWeight.w500
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: 5.h,
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                      MainAxisAlignment.spaceAround,
+                                                                      children: [
+                                                                        Text(
+                                                                          "سعر البيع : ${cubit.searchItem[index].itemModel.sellPrice}",
+                                                                          textDirection: TextDirection.rtl,
+                                                                          style: TextStyle(
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            color: ColorHelper.darkColor,
+                                                                            fontSize: 13.sp,
+                                                                            //fontWeight: FontWeight.w500
+                                                                          ),
+                                                                        ),
+                                                                        Text(
+                                                                          "السعر الاصلي : ${cubit.searchItem[index].itemModel.originalPrice}",
+                                                                          textDirection: TextDirection.rtl,
+                                                                          style: TextStyle(
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            color: ColorHelper.darkColor,
+                                                                            fontSize: 13.sp,
+                                                                            //fontWeight: FontWeight.w500
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    )
+                                                                  ],
+                                                                )),
+                                                          ),
+                                                            Icon(Icons.error_outline,
+                                                              size: 25.sp,
+                                                              color: cubit.searchItem[index].itemModel.quantity == 0 ?
+                                                              Colors.red : Colors.transparent,
+                                                            ),
+                                                          ]
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          ),
                                         ),
-                                      ),
 
 
 
-                                  );
-                                },).then( (value) {
-                                cubit.searchController.clear();
-                                cubit.searchItem= [];
-                                });
-                            },
-                            icon: const Icon(Icons.search),
-                            label: const Text("بحث")),
+                                    );
+                                  },).then( (value) {
+                                  cubit.searchController.clear();
+                                  cubit.searchItem= [];
+                                  });
+                              },
+                              icon: const Icon(Icons.search),
+                              label: const Text("بحث")),
+                        ),
+
                         Expanded(
                           child: ListView.separated(
                             separatorBuilder: (context, index) => SizedBox(
@@ -256,80 +269,101 @@ final TextEditingController searchController = TextEditingController();
                                     )
                                   ],
                                 ),
-                                child: ElevatedButton(
-                                  style: const ButtonStyle(
-                                    shape: WidgetStatePropertyAll(
-                                      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
-                                    )
-                                  ),
-                                  onPressed: (){
-                                    Navigator.pushNamed(
-                                        context, ItemDetailsScreen.routeName,
-                                        arguments: Argument(
-                                            index: index,
-                                            itemFromHive: state.items[index]))
-                                        .then((value) => GetAllItemsCubit.get(context)
-                                        .getAllItems());
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          state.items[index].itemModel.name,
-                                          textDirection: TextDirection.rtl,
-                                          style: TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                            color: ColorHelper.darkColor,
-                                            fontSize: 20.sp,
-                                            //fontWeight: FontWeight.w500
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 5.h,
-                                        ),
-                                        Text(
-                                          " الكميه : ${state.items[index].itemModel.quantity}",
-                                          textDirection: TextDirection.rtl,
-                                          style: TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                            color: ColorHelper.darkColor,
-                                            fontSize: 13.sp,
-                                            //fontWeight: FontWeight.w500
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 5.h,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              "سعر البيع : ${state.items[index].itemModel.sellPrice}",
-                                              textDirection: TextDirection.rtl,
-                                              style: TextStyle(
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorHelper.darkColor,
-                                                fontSize: 17.sp,
-                                                //fontWeight: FontWeight.w500
-                                              ),
+                                child: Stack(
+                                  alignment: Alignment.topRight,
+                                  children: [
+                                    ElevatedButton(
+                                    style: const ButtonStyle(
+                                      shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
+                                      )
+                                    ),
+                                    onPressed: (){
+                                      Navigator.pushNamed(
+                                          context, ItemDetailsScreen.routeName,
+                                          arguments: Argument(
+                                              index: index,
+                                              itemFromHive: state.items[index]))
+                                          .then((value) => GetAllItemsCubit.get(context)
+                                          .getAllItems());
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            state.items[index].itemModel.name,
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                              color: ColorHelper.darkColor,
+                                              fontSize: 20.sp,
+                                              //fontWeight: FontWeight.w500
                                             ),
-                                            Text(
-                                              "السعر الاصلي : ${state.items[index].itemModel.originalPrice}",
-                                              textDirection: TextDirection.rtl,
-                                              style: TextStyle(
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorHelper.darkColor,
-                                                fontSize: 17.sp,
-                                                //fontWeight: FontWeight.w500
-                                              ),
+                                          ),
+                                          SizedBox(
+                                            height: 5.h,
+                                          ),
+                                          Text(
+                                            " الكميه : ${state.items[index].itemModel.quantity}",
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                              color:state.items[index].itemModel.quantity == 0 ? Colors.red :
+                                              ColorHelper.darkColor,
+                                              fontSize: 13.sp,
+                                              //fontWeight: FontWeight.w500
                                             ),
-                                          ],
-                                        )
-                                      ],
+                                          ),
+                                          SizedBox(
+                                            height: 5.h,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text(
+                                                "سعر البيع : ${state.items[index].itemModel.sellPrice}",
+                                                textDirection: TextDirection.rtl,
+                                                style: TextStyle(
+                                                  overflow: TextOverflow.ellipsis,
+                                                  color: ColorHelper.darkColor,
+                                                  fontSize: 17.sp,
+                                                  //fontWeight: FontWeight.w500
+                                                ),
+                                              ),
+                                              Text(
+                                                "السعر الاصلي : ${state.items[index].itemModel.originalPrice}",
+                                                textDirection: TextDirection.rtl,
+                                                style: TextStyle(
+                                                  overflow: TextOverflow.ellipsis,
+                                                  color: ColorHelper.darkColor,
+                                                  fontSize: 17.sp,
+                                                  //fontWeight: FontWeight.w500
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
+                                    IconButton(
+                                      onPressed: () {
+                                        DialogUtilities.showMessage(
+                                            context,
+                                            "\nانتهت الكميه لهذا العنص\n",
+                                         // nigaiveActionName: "تعديل",
+                                        );
+                                      },
+                                      icon: Icon (
+                                        Icons.error_outline,
+                                        size: 30.sp,
+                                        color: state.items[index].itemModel.quantity == 0 ?
+                                        Colors.red : Colors.transparent,),
+
+                                    )
+                                  ],
                                 ),
                               ).animate().shimmer();
                             },

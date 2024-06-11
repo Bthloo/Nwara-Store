@@ -25,13 +25,19 @@ ThemeData themeData(BuildContext context) {
 
     ),
     fontFamily: "Cairo",
-    elevatedButtonTheme: const ElevatedButtonThemeData(
-      style: ButtonStyle(
+    elevatedButtonTheme:  ElevatedButtonThemeData(
 
-        backgroundColor: WidgetStatePropertyAll(
+      style: ButtonStyle(
+        backgroundColor: const WidgetStatePropertyAll(
             ColorHelper.mainColor
-        )
-      )
+        ),
+        shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(13)
+            )
+
+      ),
+    ),
     ),
     bottomSheetTheme: const BottomSheetThemeData(
       dragHandleColor: ColorHelper.mainColor,
