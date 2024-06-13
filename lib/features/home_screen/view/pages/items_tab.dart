@@ -61,170 +61,245 @@ final TextEditingController searchController = TextEditingController();
                   } else {
                     return Column(
                       children: [
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton.icon(
-                              onPressed: (){
-                                cubit.searchItem = [];
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return Dialog(
-                                      child:
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: StatefulBuilder(
-                                            builder: (context, setState) {
-                                              return Column(
-                                                children: [
-                                                  TextButton.icon(
-                                                      onPressed: (){
-                                                        Navigator.pop(context);
-                                                      },
-                                                     label: const Text("اغلاق"),
-                                                    icon: const Icon(Icons.close),
-                                                  ),
-                                                  SizedBox(height: 10.h,),
-                                                  CustomFormField(
-                                                    focus : true,
-                                                      onChange: (value) {
-                                                        cubit.searchController.text = value!;
-                                                        setState((){
-                                                          cubit.getSearchItem(value);
-                                                        });
-                                                      },
-                                                      hintText: "بحث",
-                                                      validator: (p0) {
-                                                        return null;
-                                                      },
-                                                      controller: cubit.searchController
-                                                  ),
-                                                  SizedBox(height: 10.h,),
-                                                  Expanded(
-                                                    child: ListView.separated(
-                                                      itemCount: cubit.searchItem.length,
-                                                      separatorBuilder: (context, index) => SizedBox(
-                                                        height: 5.h,
-                                                      ),
-                                                      itemBuilder: (context, index) {
-                                                        return Stack(
-                                                          alignment: Alignment.topRight,
-                                                          children:[
-                                                            ElevatedButton(
-                                                            style: const ButtonStyle(
-                                                                shape: WidgetStatePropertyAll(
-                                                                    RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
-                                                                )
-                                                            ),
-                                                            onPressed: (){
-                                                             // Navigator.pop(context);
-                                                              Navigator.pushNamed(
-                                                                  context,
-                                                                  ItemDetailsScreen.routeName,
-                                                                  arguments: Argument(
-                                                                      index: index,
-                                                                      itemFromHive: cubit.searchItem[index]))
-                                                                  .then((value){
-                                                                GetAllItemsCubit.get(getAllItemsContext)
-                                                                    .getAllItems();
-                                                                if(Navigator.canPop(context)){
-                                                                  Navigator.pop(context);
-                                                                }
-
-                                                              });
-                                                            },
-                                                            child: Container(
-                                                                padding: const EdgeInsets.all(8),
-                                                                // decoration: BoxDecoration(
-                                                                //     color: ColorHelper.mainColor,
-                                                                //     borderRadius: BorderRadius.circular(12),
-                                                                //     border: Border.all(
-                                                                //         color: ColorHelper.mainColor)),
-                                                                child: Column(
-                                                                  children: [
-
-                                                                    Text(
-                                                                      cubit.searchItem[index].itemModel.name,
-                                                                      textDirection: TextDirection.rtl,
-                                                                      style: TextStyle(
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                        color: ColorHelper.darkColor,
-                                                                        fontSize: 15.sp,
-                                                                        //fontWeight: FontWeight.w500
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      height: 5.h,
-                                                                    ),
-                                                                    Text(
-                                                                      "الكميه : ${cubit.searchItem[index].itemModel.quantity}",
-                                                                      textDirection: TextDirection.rtl,
-                                                                      style: TextStyle(
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                        color: cubit.searchItem[index].itemModel.quantity == 0 ?
-                                                                        Colors.red : ColorHelper.darkColor,
-                                                                        fontSize: 13.sp,
-                                                                        //fontWeight: FontWeight.w500
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      height: 5.h,
-                                                                    ),
-                                                                    Row(
-                                                                      mainAxisAlignment:
-                                                                      MainAxisAlignment.spaceAround,
-                                                                      children: [
-                                                                        Text(
-                                                                          "سعر البيع : ${cubit.searchItem[index].itemModel.sellPrice}",
-                                                                          textDirection: TextDirection.rtl,
-                                                                          style: TextStyle(
-                                                                            overflow: TextOverflow.ellipsis,
-                                                                            color: ColorHelper.darkColor,
-                                                                            fontSize: 13.sp,
-                                                                            //fontWeight: FontWeight.w500
-                                                                          ),
-                                                                        ),
-                                                                        Text(
-                                                                          "السعر الاصلي : ${cubit.searchItem[index].itemModel.originalPrice}",
-                                                                          textDirection: TextDirection.rtl,
-                                                                          style: TextStyle(
-                                                                            overflow: TextOverflow.ellipsis,
-                                                                            color: ColorHelper.darkColor,
-                                                                            fontSize: 13.sp,
-                                                                            //fontWeight: FontWeight.w500
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    )
-                                                                  ],
-                                                                )),
-                                                          ),
-                                                            Icon(Icons.error_outline,
-                                                              size: 25.sp,
-                                                              color: cubit.searchItem[index].itemModel.quantity == 0 ?
-                                                              Colors.red : Colors.transparent,
-                                                            ),
-                                                          ]
-                                                        );
-                                                      },
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            },
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  showAdaptiveDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text("الاحصائيات", style: TextStyle(
+                                            fontFamily: "Cairo",
                                           ),
-                                        ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                    "عدد العناصر : ${cubit.totalItems}\n"
+                                                        "عدد العناصر الفارغه : ${cubit.allEmptyItems}\n"
+                                                    "عدد العناصر الموجوده : ${cubit.totalItemsInStock}\n"
+
+                                                    "اجمالي السعر الاصلي : ${cubit.buyPrice}\n"
+                                                    "اجمالي سعر البيع : ${cubit.sellPrice}\n"
+                                                    "اجمالي الربح : ${cubit.totalIncome}",
+                                                style: const TextStyle(
+                                                  fontFamily: "Cairo",
+                                                  color: Colors.white,
+                                                  fontSize: 17,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              SizedBox(
+                                                height: 10.h,
+                                              ),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text("حسنا",
+                                                    style: TextStyle(
+                                                      color: ColorHelper.darkColor,
+                                                    ),
+                                                  )
+                                              )
+                                            ],
+                                          )
+                                        );
+                                      },
+                                  );
+                                  // DialogUtilities.showMessage(
+                                  //     context,
+                                  //     "الاحصائيات\n\n"
+                                  //         "عدد العناصر : ${cubit.totalItems}\n"
+                                  //         "عدد العناصر الموجوده : ${cubit.totalItemsInStock}\n"
+                                  //         "عدد العناصر الفارغه : ${cubit.allEmptyItems}\n"
+                                  //     "اجمالي السعر الاصلي : ${cubit.buyPrice}\n"
+                                  //         "احمالي سعر البيع : ${cubit.sellPrice}\n"
+                                  // "اجمالي الربح : ${cubit.totalIncome}"
+                                  //
+                                  //
+                                  //
+                                  // );
+                                },
+                                icon: const Icon(Icons.calculate_outlined,color: ColorHelper.mainColor,)
+                            ),
+                            IconButton(
+                                onPressed: (){
+                                  cubit.searchItem = [];
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        child:
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: StatefulBuilder(
+                                              builder: (context, setState) {
+                                                return Column(
+                                                  children: [
+                                                    TextButton.icon(
+                                                        onPressed: (){
+                                                          Navigator.pop(context);
+                                                        },
+                                                       label: const Text("اغلاق"),
+                                                      icon: const Icon(Icons.close),
+                                                    ),
+                                                    SizedBox(height: 10.h,),
+                                                    CustomFormField(
+                                                      focus : true,
+                                                        onChange: (value) {
+                                                          cubit.searchController.text = value!;
+                                                          setState((){
+                                                            cubit.getSearchItem(value);
+                                                          });
+                                                        },
+                                                        hintText: "بحث",
+                                                        validator: (p0) {
+                                                          return null;
+                                                        },
+                                                        controller: cubit.searchController
+                                                    ),
+                                                    SizedBox(height: 10.h,),
+                                                    cubit.searchItem.isEmpty ?
+                                                    const SizedBox(
+                                                      height: 50,
+                                                      child: Text("لا يوجد نتائج",style: TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.white
+                                                      ),),
+                                                    ) :
+                                                    Expanded(
+                                                      child: ListView.separated(
+                                                        itemCount: cubit.searchItem.length,
+                                                        separatorBuilder: (context, index) => SizedBox(
+                                                          height: 5.h,
+                                                        ),
+                                                        itemBuilder: (context, index) {
+                                                          return Stack(
+                                                            alignment: Alignment.topRight,
+                                                            children:[
+                                                              ElevatedButton(
+                                                              style: const ButtonStyle(
+                                                                  shape: WidgetStatePropertyAll(
+                                                                      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(13)))
+                                                                  )
+                                                              ),
+                                                              onPressed: (){
+                                                               // Navigator.pop(context);
+                                                                Navigator.pushNamed(
+                                                                    context,
+                                                                    ItemDetailsScreen.routeName,
+                                                                    arguments: Argument(
+                                                                        index: index,
+                                                                        itemFromHive: cubit.searchItem[index]))
+                                                                    .then((value){
+                                                                  GetAllItemsCubit.get(getAllItemsContext)
+                                                                      .getAllItems();
+                                                                  if(Navigator.canPop(context)){
+                                                                    Navigator.pop(context);
+                                                                  }
+
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                  padding: const EdgeInsets.all(8),
+                                                                  // decoration: BoxDecoration(
+                                                                  //     color: ColorHelper.mainColor,
+                                                                  //     borderRadius: BorderRadius.circular(12),
+                                                                  //     border: Border.all(
+                                                                  //         color: ColorHelper.mainColor)),
+                                                                  child: Column(
+                                                                    children: [
+                                                                      Text(
+                                                                        cubit.searchItem[index].itemModel.name,
+                                                                        textDirection: TextDirection.rtl,
+                                                                        style: TextStyle(
+                                                                          overflow: TextOverflow.ellipsis,
+                                                                          color: ColorHelper.darkColor,
+                                                                          fontSize: 15.sp,
+                                                                          //fontWeight: FontWeight.w500
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: 5.h,
+                                                                      ),
+                                                                      Text(
+                                                                        "الكميه : ${cubit.searchItem[index].itemModel.quantity}",
+                                                                        textDirection: TextDirection.rtl,
+                                                                        style: TextStyle(
+                                                                          overflow: TextOverflow.ellipsis,
+                                                                          color: cubit.searchItem[index].itemModel.quantity == 0 ?
+                                                                          Colors.red : ColorHelper.darkColor,
+                                                                          fontSize: 13.sp,
+                                                                          //fontWeight: FontWeight.w500
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: 5.h,
+                                                                      ),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                        MainAxisAlignment.spaceAround,
+                                                                        children: [
+                                                                          Text(
+                                                                            "سعر البيع : ${cubit.searchItem[index].itemModel.sellPrice}",
+                                                                            textDirection: TextDirection.rtl,
+                                                                            style: TextStyle(
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              color: ColorHelper.darkColor,
+                                                                              fontSize: 13.sp,
+                                                                              //fontWeight: FontWeight.w500
+                                                                            ),
+                                                                          ),
+                                                                          Text(
+                                                                            "السعر الاصلي : ${cubit.searchItem[index].itemModel.originalPrice}",
+                                                                            textDirection: TextDirection.rtl,
+                                                                            style: TextStyle(
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              color: ColorHelper.darkColor,
+                                                                              fontSize: 13.sp,
+                                                                              //fontWeight: FontWeight.w500
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    ],
+                                                                  )),
+                                                            ),
+                                                              Icon(Icons.error_outline,
+                                                                size: 25.sp,
+                                                                color: cubit.searchItem[index].itemModel.quantity == 0 ?
+                                                                Colors.red : Colors.transparent,
+                                                              ),
+                                                            ]
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            ),
+                                          ),
 
 
 
-                                    );
-                                  },).then( (value) {
-                                  cubit.searchController.clear();
-                                  cubit.searchItem= [];
-                                  });
-                              },
-                              icon: const Icon(Icons.search),
-                              label: const Text("بحث")),
+                                      );
+                                    },).then( (value) {
+                                    cubit.searchController.clear();
+                                    cubit.searchItem= [];
+                                    });
+                                },
+                                icon: const Icon(Icons.search,color: ColorHelper.mainColor),
+                               // label: const Text("بحث")
+                            ),
+                          ],
                         ),
 
                         Expanded(
