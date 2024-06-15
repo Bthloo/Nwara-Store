@@ -23,6 +23,7 @@ class GetAllItemsCubit extends Cubit<GetAllItemsState> {
   int allEmptyItems = 0;
   num totalItems = 0;
   num totalItemsInStock = 0;
+  num existItems = 0;
   getAllItems()async{
     emit(GetAllItemsLoading());
     items = [];
@@ -33,6 +34,7 @@ class GetAllItemsCubit extends Cubit<GetAllItemsState> {
     allEmptyItems = 0;
      totalItems = 0;
      totalItemsInStock = 0;
+    existItems = 0;
     try{
        for(int i = 0; i < itemBox.length; i++){
          //itemBox.getAt(i);
@@ -45,7 +47,9 @@ class GetAllItemsCubit extends Cubit<GetAllItemsState> {
         buyPrice += itemBox.getAt(i)!.quantity * itemBox.getAt(i)!.originalPrice;
         totalItemsInStock += itemBox.getAt(i)!.quantity;
         if(itemBox.getAt(i)!.quantity == 0){
-          allEmptyItems++;
+          allEmptyItems ++;
+        }else{
+          existItems ++;
         }
 
          // items.add(
